@@ -22,8 +22,9 @@ func NewService(storage *db.Storage) *Service{
 
 
 
-func (s *Service) FindUserSegment(Slug string) (models.User ,error){    
- 
+func (s *Service) FindUserSegment(Slug string) ([]models.UserSegment ,error){    
+	result,err:=s.Storage.FindUserSegment(Slug)
+	return result,err
 }
 
 func (s *Service) NewUserSegment(segment models.UserSegment) (error){     

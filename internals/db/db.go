@@ -1,9 +1,13 @@
 package db
 
 import (
+	"avito_test/internals/models"
 	"l0/internal/model"
+	"fmt"
 	"github.com/georgysavva/scany/pgxscan"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"context"
+
 )
 
 type Storage struct {
@@ -31,7 +35,18 @@ func (db *Storage) DeleteSegment(order model.Order) error {
  
 }
  
-func (db *Storage) FindUserSegment(order model.Order) error {
- 
+func (db *Storage) FindUserSegment(slug string) ([]models.UserSegment,error) {
+	query := "SELECT id, name, rank FROM users WHERE name = $1"
+	 
+	var result []models.UserSegment
+
+	err := pgxscan.Select(context.Background(), db.databasePool, &result, query, slug)
+
+	if err != nil {
+		return nil, fmt.Errorf("FindUserSegment: failed to execute query: %w", err)
+	}
+
+	return result,err
+
 }
  
