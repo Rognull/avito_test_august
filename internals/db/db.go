@@ -36,7 +36,7 @@ func (db *Storage) DeleteSegment(order model.Order) error {
 }
  
 func (db *Storage) FindUserSegment(slug string) ([]models.UserSegment,error) {
-	query := "SELECT id, name, rank FROM users WHERE name = $1"
+	query := "SELECT id, name, rank FROM users WHERE name = $1" // TODO right query 
 	 
 	var result []models.UserSegment
 
