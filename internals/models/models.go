@@ -12,7 +12,7 @@ type User struct {
 type Segment struct { 
  ID        int       `json:"id"` 
  Slug      string    `json:"slug"` 
- CreatedAt time.Time `json:"created_at"` 
+ CreatedAt time.Time `json:"created_at "` 
 } 
  
 type UserSegment struct { 

@@ -23,46 +23,47 @@ func NewHandler(Service *services.Service) *Handler{
 }
 
 func (h *Handler) FindUserSegment(w http.ResponseWriter, r *http.Request){
-	// vars := mux.Vars(r) 
-	// if vars["order_uid"] == "" {
-	// 	WrapError(w, errors.New("missing id"))
-	// 	return
-	// }
+	vars := mux.Vars(r) 
+	if vars["user_id"] == "" {
+		WrapError(w, errors.New("missing id"))
+		return
+	}
 
 
-	// order, err := h.service.GetOrder(vars["order_uid"])
-	// if err != nil {
-	// 	WrapError(w, err)
-	// 	return
-	// }
+	segment, err := h.service.FindUserSegment(vars["user_id"])
+	if err != nil {
+		WrapError(w, err)
+		return
+	}
 
-	// var m = map[string]interface{} {
-	// 	"result" : "OK",
-	// 	"data" : order,
-	// }
+	var m = map[string]interface{} {
+		"result" : "OK",
+		"data" : segment,
+	}
 
-	// WrapOK(w, m)
+	WrapOK(w, m)
 }
 func (h *Handler) NewUserSegment(w http.ResponseWriter, r *http.Request){
-	// vars := mux.Vars(r) 
-	// if vars["order_uid"] == "" {
-	// 	WrapError(w, errors.New("missing id"))
-	// 	return
-	// }
+	var newCar models.UserSegment
 
+	err := json.NewDecoder(r.Body).Decode(&newCar)  
+	if err != nil {
+		WrapError(w, err) 
+		return
+	}
 
-	// order, err := h.service.GetOrder(vars["order_uid"])
-	// if err != nil {
-	// 	WrapError(w, err)
-	// 	return
-	// }
+	err = h.service.NewUserSegment(newCar) 
+	if err != nil {
+		WrapError(w, err)
+		return
+	}
 
-	// var m = map[string]interface{} {
-	// 	"result" : "OK",
-	// 	"data" : order,
-	// }
+	var m = map[string]interface{} {  
+		"result" : "OK",
+		"data" : "",
+	}
 
-	// WrapOK(w, m)
+	WrapOK(w, m) //здесь возвращаем код 200 и успех
 }
 
 func (h *Handler) NewSegment(w http.ResponseWriter, r *http.Request){
