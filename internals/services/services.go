@@ -1,12 +1,12 @@
 package services
 
 import (
-	"errors"
+	// "errors"
  
 	// "fmt"
 	"avito_test/internals/db"
 	"avito_test/internals/models"
-	"github.com/sirupsen/logrus"
+	// "github.com/sirupsen/logrus"
 )
 
 type Service struct{
@@ -28,13 +28,14 @@ func (s *Service) FindUserSegment(Slug string) ([]models.UserSegment ,error){
 }
 
 func (s *Service) NewUserSegment(segment models.UserSegment) (error){     
- 
+ return nil
 }
  
-func (s *Service) NewSegment(segment models.Segment) (error){      
- 
+func (s *Service) NewSegment(segment models.Segment) ([]models.User, error){      
+	result,err := s.Storage.AddSegment(segment)
+	return result,err
 }
 
 func (s *Service) DeleteSegment(segment models.Segment) (error){    
- 
+ return nil
 }

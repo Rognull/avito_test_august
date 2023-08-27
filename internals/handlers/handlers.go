@@ -67,25 +67,27 @@ func (h *Handler) NewUserSegment(w http.ResponseWriter, r *http.Request){
 }
 
 func (h *Handler) NewSegment(w http.ResponseWriter, r *http.Request){
-	// vars := mux.Vars(r) 
-	// if vars["order_uid"] == "" {
-	// 	WrapError(w, errors.New("missing id"))
-	// 	return
-	// }
+	var newSegment models.Segment
 
+	err := json.NewDecoder(r.Body).Decode(&newSegment)  
+	if err != nil {
+		WrapError(w, err) 
+		return
+	}
+	
+	res,err := h.service.NewSegment(newSegment)
+	
+	if err != nil {
+		WrapError(w, err)
+		  	return
+	}
 
-	// order, err := h.service.GetOrder(vars["order_uid"])
-	// if err != nil {
-	// 	WrapError(w, err)
-	// 	return
-	// }
+	var m = map[string]interface{} {
+		"result" : "OK",
+		"data" : res,
+	}
 
-	// var m = map[string]interface{} {
-	// 	"result" : "OK",
-	// 	"data" : order,
-	// }
-
-	// WrapOK(w, m)
+	WrapOK(w, m)
 }
 
 
