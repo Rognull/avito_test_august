@@ -5,7 +5,7 @@ import (
 ) 
  
 type User struct { 
- ID        int       `json:"id"` 
+ ID       int       `json:"id"` 
  CreatedAt time.Time `json:"created_at,omitempty"` 
 } 
  

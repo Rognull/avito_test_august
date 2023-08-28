@@ -26,17 +26,16 @@ func (db *Storage) AddSegment(seg models.Segment) ([]models.User, error) {
 	defer func() {
 		err = tx.Rollback(context.Background())
 		if err != nil {
-			log.Errorln(err)
+			// log.Errorln(err)
 			// fmt.Printf("Error in Rollback: %w", err)
 		}
 	}()
-    queryy := "CREATE TABLE IF NOT EXISTS segments ( id SERIAL PRIMARY KEY, slug VARCHAR NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT current_timestamp)" 
-	db.databasePool.Exec(context.Background(),queryy)
+    // queryy := "CREATE TABLE IF NOT EXISTS segments ( id SERIAL PRIMARY KEY, slug VARCHAR NOT NULL UNIQUE, created_at TIMESTAMP DEFAULT current_timestamp)" 
+	// db.databasePool.Exec(context.Background(),queryy)
 	queryForSegment := "INSERT INTO segments (id, slug, created_at) VALUES (DEFAULT, $1, DEFAULT) RETURNING id"
 
-	idOfSegment:= -1
+	idOfSegment := -1
 	err = tx.QueryRow(context.Background(),queryForSegment,seg.Slug).Scan(&idOfSegment)
-	
 	// Exec(ctx, queryForSegment, seg.Slug,&idOfSegment)
 
 	if err != nil {
@@ -46,11 +45,11 @@ func (db *Storage) AddSegment(seg models.Segment) ([]models.User, error) {
 
 	buf := []models.User{}
 	if seg.Procent != 0 {
-		 
-		procent := seg.Procent / 100.0
-		query := "SELECT id FROM users LIMIT(SELECT COUNT(*) FROM my_table) * $1 "
-		err = pgxscan.Get(ctx, tx, buf, query, procent)
-
+		procent := float64(seg.Procent) / 100.0
+		// query := "SELECT id FROM users LIMIT(SELECT COUNT(id) FROM users) * $1 "
+		query := "SELECT id FROM users"
+		err = pgxscan.Select(context.Background(), tx, &buf, query)
+		fmt.Println(buf)
 		if err != nil {
 			log.Errorln(err)
 			err = tx.Rollback(context.Background()) 
@@ -60,17 +59,18 @@ func (db *Storage) AddSegment(seg models.Segment) ([]models.User, error) {
 			return nil, fmt.Errorf("error in select query: %w", err)
 		}
 
-		query = "INSERT INTO user_segments(user_id,segment_id,added_at,delete_time) VALUES ($1,$2,DEFAULT,DEFAULT);"
-
-		for _,i:=range buf{
-		 _,err = tx.Exec(ctx, queryForSegment,i.ID,idOfSegment)
+		query = "INSERT INTO user_segments(user_id, segment_id, added_at, delete_time) VALUES ($1, $2, DEFAULT, DEFAULT);"
+		 
+		for i:=0; i < int(float64(len(buf)) * procent);i++{
+			log.Println(i, buf[i].ID)
+		 _,err = tx.Exec(context.Background(), query ,buf[i].ID,idOfSegment)
 		 if err != nil {
 			log.Errorln(err)
 			err = tx.Rollback(context.Background())  
 			if err != nil {
 				log.Errorln(err)
 			}
-			return nil, fmt.Errorf("error in select query: %w", err)
+			return nil, fmt.Errorf("error in insert query: %w", err)
 		 }
 		}
 	}
