@@ -64,7 +64,7 @@ func (h *Handler) NewUserSegment(w http.ResponseWriter, r *http.Request){
 		"data" : "",
 	}
 
-	WrapOK(w, m) //здесь возвращаем код 200 и успех
+	WrapOK(w, m) 
 }
 
 func (h *Handler) NewSegment(w http.ResponseWriter, r *http.Request){
