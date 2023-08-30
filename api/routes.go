@@ -7,10 +7,10 @@ import (
 
 func CreateRoutes(h *handlers.Handler) *mux.Router {
 	r := mux.NewRouter()  
-	r.HandleFunc("/user_segment/find/{user_id:[0-9]+}",h.FindUserSegment).Methods("GET")
+	r.HandleFunc("/segment/find",h.FindUserSegment).Methods("POST")
 	r.HandleFunc("/user_segment",h.NewUserSegment).Methods("POST")
 	r.HandleFunc("/segment",h.NewSegment).Methods("POST")
-	r.HandleFunc("/segment",h.DeleteSegment).Methods("DELETE")
+	r.HandleFunc("/segment/delete",h.DeleteSegment).Methods("POST")
 	r.NotFoundHandler = r.NewRoute().HandlerFunc(handlers.NotFound).GetHandler() 
 	return r
 }

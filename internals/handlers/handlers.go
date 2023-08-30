@@ -7,7 +7,7 @@ import (
    "errors"
    "avito_test/internals/services"
    "avito_test/internals/models"
-   "github.com/gorilla/mux"
+//    "github.com/gorilla/mux"
 //    "strconv"
 //    "github.com/sirupsen/logrus"
 )
@@ -23,14 +23,15 @@ func NewHandler(Service *services.Service) *Handler{
 }
 
 func (h *Handler) FindUserSegment(w http.ResponseWriter, r *http.Request){
-	vars := mux.Vars(r) 
-	if vars["user_id"] == "" {
-		WrapError(w, errors.New("missing id"))
+	var user models.User
+
+	err := json.NewDecoder(r.Body).Decode(&user)  
+	if err != nil {
+		WrapError(w, err) 
 		return
 	}
+	result,err := h.service.FindUserSegment(int64(user.ID))
 
-
-	segment, err := h.service.FindUserSegment(vars["user_id"])
 	if err != nil {
 		WrapError(w, err)
 		return
@@ -38,21 +39,21 @@ func (h *Handler) FindUserSegment(w http.ResponseWriter, r *http.Request){
 
 	var m = map[string]interface{} {
 		"result" : "OK",
-		"data" : segment,
+		"data" : result,
 	}
 
 	WrapOK(w, m)
 }
 func (h *Handler) NewUserSegment(w http.ResponseWriter, r *http.Request){
-	var newCar models.UserSegment
+	var newAddRequest models.AddRequest
 
-	err := json.NewDecoder(r.Body).Decode(&newCar)  
+	err := json.NewDecoder(r.Body).Decode(&newAddRequest)  
 	if err != nil {
 		WrapError(w, err) 
 		return
 	}
 
-	err = h.service.NewUserSegment(newCar) 
+	err = h.service.NewUserSegment(newAddRequest) 
 	if err != nil {
 		WrapError(w, err)
 		return

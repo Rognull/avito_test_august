@@ -14,21 +14,24 @@ type Service struct{
 }
 
 
-func NewService(storage *db.Storage) *Service{
+
+
+func NewService(storage db.Storage) *Service{
 	resultService := new(Service)
-	resultService.Storage = *storage
+	resultService.Storage = storage
 	return resultService
 }
 
 
 
-func (s *Service) FindUserSegment(Slug string) ([]models.UserSegment ,error){    
-	result,err:=s.Storage.FindUserSegment(Slug)
+func (s *Service) FindUserSegment(id int64) ([]models.Segment ,error){    
+	result,err:=s.Storage.FindUserSegment(id)
 	return result,err
 }
 
-func (s *Service) NewUserSegment(segment models.UserSegment) (error){     
- return nil
+func (s *Service) NewUserSegment(addRequest models.AddRequest) (error){     
+	err := s.Storage.AddUserSegment(addRequest)
+	 return err
 }
  
 func (s *Service) NewSegment(segment models.Segment) ([]models.User, error){      

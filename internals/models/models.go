@@ -5,14 +5,19 @@ import (
 ) 
  
 type User struct { 
- ID       int       `json:"id"` 
+ ID       int64       `json:"id"` 
  CreatedAt time.Time `json:"created_at,omitempty"` 
 } 
  
+type AddRequest struct{
+	ID int64  `json:"id"` 
+	AddSegment[] string `json:"add_segment,omitempty"` 
+	DeleteSegment[] string  `json:"delete_segment,omitempty"` 
+}
 type Segment struct { 
  ID        int       `json:"id,omitempty"` 
  Slug      string    `json:"slug"` 
- Procent   int    	`json:"Procent,omitempty"` 
+ Procent   int    	`json:"procent,omitempty"` 
  CreatedAt time.Time `json:"created_at,omitempty"` 
 } 
  

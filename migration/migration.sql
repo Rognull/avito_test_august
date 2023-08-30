@@ -26,4 +26,26 @@ INSERT INTO user_segments(user_id, segment_id, added_at, delete_time) VALUES (1,
 
  ;
 
- SELECT id FROM users LIMIT(SELECT COUNT(*) FROM users) * 0.3;
+ SELECT 2, id FROM users LIMIT(SELECT COUNT(*) FROM users) * 0.3;
+
+
+
+
+ UPDATE user_segments SET delete_time = CURRENT_TIMESTAMP::timestamp  where segment_id = (SELECT id from segments where slug = 'start')
+ 
+;
+SELECT id from segments where slug = 'start'
+
+;
+SELECT segments.id, segments.slug, segments.created_at FROM segments JOIN user_segments ON user_segments.segment_id = segments.id  WHERE user_id = 1 AND (delete_time > CURRENT_TIMESTAMP::timestamp or delete_time is NULL); 
+
+
+;
+ SELECT * FROM segments where slug in 
+
+
+;
+ INSERT INTO user_segments(user_id, segment_id)  (SELECT 10, id from segments where slug = 'start')
+
+
+ SELECT 10, id from segments where slug ='start'
