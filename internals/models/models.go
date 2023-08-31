@@ -13,6 +13,7 @@ type AddRequest struct{
 	ID int64  `json:"id"` 
 	AddSegment[] string `json:"add_segment,omitempty"` 
 	DeleteSegment[] string  `json:"delete_segment,omitempty"` 
+	DeleteTime time.Time `json:"delete_time,omitempty"` 
 }
 type Segment struct { 
  ID        int       `json:"id,omitempty"` 

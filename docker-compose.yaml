@@ -1,12 +1,45 @@
 
 version: "3.9"
 services:
-  postgres:
+  db:
     image: postgres:13.3
+    volumes:
+      - vol_db:/var/lib/postgres/data
+      - ./migration/migration.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_DB: "test"
       POSTGRES_USER: "kirill"
       POSTGRES_PASSWORD: "postgres"
- 
+    networks:
+      - net-one
     ports:
-      - "5433:5432"
+      - "5432:5432"
+    restart: always
+
+  server:
+    container_name: avito
+    environment:
+      SERV_PORT: "8080"
+      SERV_DBUSER: "kirill"
+      SERV_DBPASS: "postgres"
+      SERV_DBHOST: "db"
+      SERV_DBPORT: "5432"
+      SERV_DBNAME: "test"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+      - 8080:8080 
+    depends_on:
+      - db
+    networks:
+      - net-one
+    restart: always
+    
+volumes:
+  vol_db:
+    driver: local
+
+networks:
+  net-one:
+    driver: bridge

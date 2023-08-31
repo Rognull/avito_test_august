@@ -7,9 +7,6 @@ import (
    "errors"
    "avito_test/internals/services"
    "avito_test/internals/models"
-//    "github.com/gorilla/mux"
-//    "strconv"
-//    "github.com/sirupsen/logrus"
 )
 
 type Handler struct{
@@ -76,7 +73,7 @@ func (h *Handler) NewSegment(w http.ResponseWriter, r *http.Request){
 		return
 	}
 	
-	res,err := h.service.NewSegment(newSegment)
+	err = h.service.NewSegment(newSegment)
 	
 	if err != nil {
 		WrapError(w, err)
@@ -85,7 +82,7 @@ func (h *Handler) NewSegment(w http.ResponseWriter, r *http.Request){
 
 	var m = map[string]interface{} {
 		"result" : "OK",
-		"data" : res,
+		"data" : err,
 	}
 
 	WrapOK(w, m)
@@ -93,25 +90,27 @@ func (h *Handler) NewSegment(w http.ResponseWriter, r *http.Request){
 
 
 func (h *Handler) DeleteSegment(w http.ResponseWriter, r *http.Request){
-	// vars := mux.Vars(r) 
-	// if vars["order_uid"] == "" {
-	// 	WrapError(w, errors.New("missing id"))
-	// 	return
-	// }
+	var newSegment models.Segment
 
+	err := json.NewDecoder(r.Body).Decode(&newSegment)  
+	if err != nil {
+		WrapError(w, err) 
+		return
+	}
+	
+	err = h.service.DeleteSegment(newSegment)
+	
+	if err != nil {
+		WrapError(w, err)
+		  	return
+	}
 
-	// order, err := h.service.GetOrder(vars["order_uid"])
-	// if err != nil {
-	// 	WrapError(w, err)
-	// 	return
-	// }
+	var m = map[string]interface{} {
+		"result" : "OK",
+		"data" : err,
+	}
 
-	// var m = map[string]interface{} {
-	// 	"result" : "OK",
-	// 	"data" : order,
-	// }
-
-	// WrapOK(w, m)
+	WrapOK(w, m)
 }
 
 func WrapError(w http.ResponseWriter, err error) {

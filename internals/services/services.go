@@ -1,12 +1,8 @@
 package services
 
 import (
-	// "errors"
- 
-	// "fmt"
 	"avito_test/internals/db"
 	"avito_test/internals/models"
-	// "github.com/sirupsen/logrus"
 )
 
 type Service struct{
@@ -34,11 +30,14 @@ func (s *Service) NewUserSegment(addRequest models.AddRequest) (error){
 	 return err
 }
  
-func (s *Service) NewSegment(segment models.Segment) ([]models.User, error){      
-	result,err := s.Storage.AddSegment(segment)
-	return result,err
+func (s *Service) NewSegment(segment models.Segment) error{      
+	err := s.Storage.AddSegment(segment)
+	return err
 }
 
 func (s *Service) DeleteSegment(segment models.Segment) (error){    
- return nil
+
+ err:= s.Storage.DeleteSegment(segment.Slug)
+
+ return err
 }

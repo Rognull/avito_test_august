@@ -14,7 +14,6 @@ import (
 	"time"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/rs/zerolog"
-	// "github.com/sirupsen/logrus"
 )
 
 type AppServer struct {
@@ -25,7 +24,7 @@ type AppServer struct {
 	logger *zerolog.Logger
 }
 
-func NewServer(config cfg.Cfg, cntx context.Context,logg *zerolog.Logger) *AppServer { //задаем поля нашего сервера, для его старта нам нужен контекст и конфигурация
+func NewServer(config cfg.Cfg, cntx context.Context,logg *zerolog.Logger) *AppServer { 
 	server := new(AppServer)
 	server.ctx = cntx
 	server.config = config

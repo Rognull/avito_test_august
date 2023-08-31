@@ -18,11 +18,11 @@ func LoadAndStoreConfig() Cfg {
 	v := viper.New() 
 	v.SetEnvPrefix("SERV") 
 	v.SetDefault("PORT", "8080")
-	v.SetDefault("DBUSER", "postgres")
-	v.SetDefault("DBPASS", "postgres")
-	v.SetDefault("DBHOST", "localhost")
+	v.SetDefault("DBUSER", "kirill")
+	v.SetDefault("DBPASS", "password")
+	v.SetDefault("DBHOST", "db")
 	v.SetDefault("DBPORT", "5432")
-	v.SetDefault("DBNAME", "postgres")
+	v.SetDefault("DBNAME", "test")
 	v.AutomaticEnv()
 
 	var cfg Cfg
